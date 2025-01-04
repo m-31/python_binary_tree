@@ -39,7 +39,7 @@ class BinaryTree:
             raise AssertionError(f"should be of type LeafNode, not {type(node)}")
         node.value += 1
 
-    def delete(self, word):
+    def delete(self, word: int):
         if word.bit_length() > self.max_bits:
             raise ValueError(f"bit length {word.bit_length()} exceeds {self.max_bits}")
         binary = f"{word:0{self.max_bits}b}"  # Format to fixed-length binary
@@ -57,7 +57,7 @@ class BinaryTree:
         else:
             return False
 
-    def get(self, word):
+    def get(self, word: int):
         if word.bit_length() > self.max_bits:
             raise ValueError(f"bit length {word.bit_length()} exceeds {self.max_bits}")
         binary = f"{word:0{self.max_bits}b}"  # Format to fixed-length binary
@@ -107,4 +107,10 @@ if __name__ == "__main__":
 
     print()
     bt.delete(17)
+    bt.print()
+
+    print()
+    bt = BinaryTree(990)
+    bt.insert(1)
+    bt.insert(2 ** 989)
     bt.print()
