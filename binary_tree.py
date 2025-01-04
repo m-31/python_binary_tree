@@ -20,17 +20,27 @@ class BinaryTree:
         self.root = TreeNode()
 
     def print(self):
-        self._print_tree_part(self.root)
+        list1 = [(self.root, "")]
+        while len(list1) > 0:
+            list2 = []
+            for node, prefix in list1:
+                if isinstance(node, LeafNode) and node.value > 0:
+                    print(f"{prefix}: {node.value}")
+                elif isinstance(node, TreeNode):
+                    for index in range(2):  # Add children in order
+                        if node.bit[index] is not None:
+                            list2.append((node.bit[index], f"{prefix}{index}"))
+            list1 = list2
 
     def insert(self, word: int):
         if word.bit_length() > self.max_bits:
             raise ValueError(f"bit length {word.bit_length()} exceeds {self.max_bits}")
         binary = f"{word:0{self.max_bits}b}"  # Format to fixed-length binary
         node = self.root
-        for i in range(len(binary) - 1, -1, -1):
+        for i in range(len(binary)):
             b = int(binary[i])
             if node.bit[b] is None:  # new entry
-                if i > 0:
+                if i < len(binary) - 1:
                     node.bit[b] = TreeNode()
                 else:
                     node.bit[b] = LeafNode()
@@ -44,7 +54,7 @@ class BinaryTree:
             raise ValueError(f"bit length {word.bit_length()} exceeds {self.max_bits}")
         binary = f"{word:0{self.max_bits}b}"  # Format to fixed-length binary
         node = self.root
-        for i in range(len(binary) - 1, -1, -1):
+        for i in range(len(binary)):
             b = int(binary[i])
             if node.bit[b] is None:
                 return False
@@ -62,7 +72,7 @@ class BinaryTree:
             raise ValueError(f"bit length {word.bit_length()} exceeds {self.max_bits}")
         binary = f"{word:0{self.max_bits}b}"  # Format to fixed-length binary
         node = self.root
-        for i in range(len(binary) - 1, -1, -1):
+        for i in range(len(binary)):
             b = int(binary[i])
             if node.bit[b] is None:
                 return 0
@@ -70,17 +80,6 @@ class BinaryTree:
         if not isinstance(node, LeafNode):
             raise AssertionError(f"should be of type LeafNode, not {type(node)}")
         return node.value
-
-    def _print_tree_part(self, node: [None, LeafNode, TreeNode], prefix=""):
-        if node is None:
-            print("", end='')
-        if isinstance(node, LeafNode) and node.value > 0:
-            print(f"{prefix}: {node.value}")
-        if isinstance(node, TreeNode):
-            for index in range(len(node.bit)):
-                n = node.bit[index]
-                if n is not None:
-                    self._print_tree_part(n, f"{index}{prefix}")
 
 
 if __name__ == "__main__":
@@ -113,4 +112,12 @@ if __name__ == "__main__":
     bt = BinaryTree(990)
     bt.insert(1)
     bt.insert(2 ** 989)
+    bt.print()
+
+    print()
+    bt = BinaryTree(5000)
+    bt.insert(1)
+    bt.insert(2 ** (5000 - 1))
+    bt.insert(2 ** 2500 + 2 ** 2501 + 2 ** 2502 + 2 ** 2503)
+    bt.insert(2 ** 5000 - 1)
     bt.print()
